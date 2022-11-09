@@ -1,6 +1,22 @@
 {
   "name": "ng-flutterwave",
   "version": "0.0.1",
+  "author": {
+    "name": "Olawale Mayor",
+    "email": "olawalemayor90@gmail.com",
+    "url": "https://olawalemayor.netlify.app"
+  },
+  "keywords": [
+    "fintech",
+    "flutterwave",
+    "angular",
+    "payment",
+    "pay",
+    "shop",
+    "africa",
+    "nigeria",
+    "gateway"
+  ],
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

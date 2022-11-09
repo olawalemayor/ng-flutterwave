@@ -50,6 +50,12 @@ where `data` is of the interface FlutterwaveInlineRequest, `callback` is a funct
 
 There will be additions of more functionalities and schematic support to ease installation and initialization of the package in your project
 
+## Flutterwave references
+
+<https://developer.flutterwave.com/docs> - Developer documentation  
+<https://developer.flutterwave.com/docs/flutterwave-inline> - Flutterwave Inline Payment documentation  
+<https://developer.flutterwave.com/docs/flutterwave-inline> - Flutterwave Dashboard
+
 ## Contact the author
 
 Email: olawalemayor90@gmail.com  
