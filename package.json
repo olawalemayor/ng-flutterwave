@@ -1,11 +1,13 @@
 {
   "name": "ng-flutterwave",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": {
     "name": "Olawale Mayor",
     "email": "olawalemayor90@gmail.com",
     "url": "https://olawalemayor.netlify.app"
   },
+  "homepage": "https://github.com/olawalemayor/ng-flutterwave",
+  "description": "This is a library for making payments with Flutterwave compatible with the latest version of Angular (14.0.0)",
   "keywords": [
     "fintech",
     "flutterwave",
