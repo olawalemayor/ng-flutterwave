@@ -46,14 +46,14 @@ Use the MakeInlinePayment component in your application:
 
 where `data` is of the interface FlutterwaveInlineRequest, `callback` is a function called alongside the payment and `close` is a cleanup function called when the payment modal is closed
 
-## What to expext in future
+## What to expect in the future
 
 There will be additions of more functionalities and schematic support to ease installation and initialization of the package in your project
 
-## Contact author
+## Contact the author
 
-Email: <mailto://olawalemayor90@gmail.com>
-Github: <https://github.com/olawalemayor>
-LinkedIn: <https://linkedin.com/in/olawale-mayor>
-twitter: <https://twitter.com/olawalemayor>
+Email: olawalemayor90@gmail.com  
+Github: <https://github.com/olawalemayor>  
+LinkedIn: <https://linkedin.com/in/olawale-mayor>  
+twitter: <https://twitter.com/olawalemayor>  
 facebook: <https://facebook.com/ItsOlawale/>
