@@ -1,49 +1,33 @@
 {
-  "name": "ng-flutterwave",
-  "version": "0.0.3",
-  "author": {
-    "name": "Olawale Mayor",
-    "email": "olawalemayor90@gmail.com",
-    "url": "https://olawalemayor.netlify.app"
-  },
-  "homepage": "https://github.com/olawalemayor/ng-flutterwave",
-  "description": "This is a library for making payments with Flutterwave compatible with the latest version of Angular (14.0.0)",
-  "keywords": [
-    "fintech",
-    "flutterwave",
-    "angular",
-    "payment",
-    "pay",
-    "shop",
-    "africa",
-    "nigeria",
-    "gateway"
-  ],
+  "name": "ng-flutterwave-workspace",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "start": "ng serve demo",
+    "build": "ng build ng-flutterwave && cp README.md dist/ng-flutterwave/",
+    "build:demo": "ng build demo",
+    "watch": "ng build ng-flutterwave --watch --configuration development",
+    "test": "ng test ng-flutterwave",
+    "publish:lib": "npm run build && cd dist/ng-flutterwave && npm publish"
   },
-  "private": false,
   "dependencies": {
-    "@angular/animations": "^14.0.0",
-    "@angular/common": "^14.0.0",
-    "@angular/compiler": "^14.0.0",
-    "@angular/core": "^14.0.0",
-    "@angular/forms": "^14.0.0",
-    "@angular/platform-browser": "^14.0.0",
-    "@angular/platform-browser-dynamic": "^14.0.0",
-    "@angular/router": "^14.0.0",
+    "@angular/animations": "^16.2.12",
+    "@angular/common": "^16.2.12",
+    "@angular/compiler": "^16.2.12",
+    "@angular/core": "^16.2.12",
+    "@angular/forms": "^16.2.12",
+    "@angular/platform-browser": "^16.2.12",
+    "@angular/platform-browser-dynamic": "^16.2.12",
+    "@angular/router": "^16.2.12",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.11.4"
+    "zone.js": "~0.13.3"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^14.0.2",
-    "@angular/cli": "~14.0.2",
-    "@angular/compiler-cli": "^14.0.0",
+    "@angular-devkit/build-angular": "^16.2.16",
+    "@angular/cli": "~16.2.16",
+    "@angular/compiler-cli": "^16.2.12",
     "@types/jasmine": "~4.0.0",
     "jasmine-core": "~4.1.0",
     "karma": "~6.3.0",
@@ -51,6 +35,11 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
-    "typescript": "~4.7.2"
+    "ng-packagr": "^16.2.3",
+    "typescript": "~4.9.5"
+  },
+  "allowScripts": {
+    "esbuild@0.15.5": true,
+    "fsevents@2.3.2": true
   }
 }

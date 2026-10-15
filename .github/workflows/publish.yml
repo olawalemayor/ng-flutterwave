@@ -1,0 +1,66 @@
+name: Publish to npm
+
+# Runs on every push to master. Publishes only when the version in
+# projects/ng-flutterwave/package.json isn't on npm yet, so to release:
+# bump that version and merge to master.
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+permissions:
+  contents: write # push the release tag
+  id-token: write # npm provenance
+
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+          registry-url: https://registry.npmjs.org
+
+      - name: Check if this version is already published
+        id: version
+        run: |
+          VERSION=$(node -p "require('./projects/ng-flutterwave/package.json').version")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          if [ "$(npm view "ng-flutterwave@$VERSION" version 2>/dev/null)" = "$VERSION" ]; then
+            echo "ng-flutterwave@$VERSION is already on npm, nothing to publish."
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.version.outputs.publish == 'true'
+        run: npm ci
+
+      - name: Test library
+        if: steps.version.outputs.publish == 'true'
+        run: npx ng test ng-flutterwave --watch=false --browsers=ChromeHeadless
+
+      - name: Build library
+        if: steps.version.outputs.publish == 'true'
+        run: npm run build
+
+      - name: Publish
+        if: steps.version.outputs.publish == 'true'
+        working-directory: dist/ng-flutterwave
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Tag release
+        if: steps.version.outputs.publish == 'true'
+        run: |
+          git tag "v${{ steps.version.outputs.version }}"
+          git push origin "v${{ steps.version.outputs.version }}"

@@ -5,8 +5,9 @@
 export const environment = {
   production: false,
 
-  // Flutterwave
-  flutterwaveApiKey: 'FLWPUBK_TEST-e8b8d8f2e6509e3fd8b3ee4a3a52cb2f-X',
+  // Flutterwave public key, filled in at build time from the
+  // FLUTTERWAVE_PUBLIC_KEY GitHub secret (see .github/workflows/deploy-demo.yml)
+  flutterwaveApiKey: '__FLUTTERWAVE_PUBLIC_KEY__',
 };
 
 /*
