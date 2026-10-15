@@ -14,7 +14,7 @@ concurrency:
 
 permissions:
   contents: write # push the release tag
-  id-token: write # npm provenance
+  id-token: write # npm trusted publishing (OIDC)
 
 jobs:
   publish:
@@ -27,7 +27,6 @@ jobs:
         with:
           node-version: 18
           cache: npm
-          registry-url: https://registry.npmjs.org
 
       - name: Check if this version is already published
         id: version
@@ -52,12 +51,24 @@ jobs:
         if: steps.version.outputs.publish == 'true'
         run: npm run build
 
+      # Trusted publishing needs npm >= 11.5.1, which needs a newer Node than
+      # Angular 16 builds with, so only the publish step switches Node version.
+      - uses: actions/setup-node@v4
+        if: steps.version.outputs.publish == 'true'
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      - name: Update npm
+        if: steps.version.outputs.publish == 'true'
+        run: npm install -g npm@^11.5.1
+
+      # No token: npm authenticates with GitHub's OIDC identity and adds
+      # provenance automatically. Set up the trusted publisher on npmjs.com first.
       - name: Publish
         if: steps.version.outputs.publish == 'true'
         working-directory: dist/ng-flutterwave
-        run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public
 
       - name: Tag release
         if: steps.version.outputs.publish == 'true'

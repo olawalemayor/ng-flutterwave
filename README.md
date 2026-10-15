@@ -175,7 +175,8 @@ Two GitHub Actions workflows live in `.github/workflows`:
 
 One-time setup in the GitHub repo settings:
 
-- **Settings → Secrets and variables → Actions**: add `FLUTTERWAVE_PUBLIC_KEY` (your `FLWPUBK...` key, never the secret key) and `NPM_TOKEN` (an npm automation token).
+- **Settings → Secrets and variables → Actions**: add `FLUTTERWAVE_PUBLIC_KEY` (your `FLWPUBK...` key, never the secret key).
+- **npmjs.com → ng-flutterwave → Settings → Trusted Publisher**: add a GitHub Actions publisher for this repository with the workflow filename `publish.yml`. Publishing uses this instead of an npm token.
 - **Settings → Pages**: set Source to **GitHub Actions**.
 
 ## Contact the author
