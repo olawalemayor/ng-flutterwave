@@ -1,5 +1,119 @@
-<make-inline-payment
-  [data]="paymentData"
-  (callback)="makePaymentCallback($event)"
-  (close)="cancelledPayment()"
-></make-inline-payment>
+<main class="page">
+  <header class="hero">
+    <span class="badge"><span class="dot"></span>Test mode</span>
+    <h1>ng-flutterwave</h1>
+    <p class="lead">
+      Flutterwave payments for Angular 16+. Drop a directive on a button or a
+      form and you're taking payments.
+    </p>
+    <nav class="links">
+      <a href="https://github.com/olawalemayor/ng-flutterwave" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.npmjs.com/package/ng-flutterwave" target="_blank" rel="noopener">npm</a>
+      <a href="https://developer.flutterwave.com/docs/testing" target="_blank" rel="noopener">Test cards</a>
+    </nav>
+  </header>
+
+  <section
+    *ngIf="checkoutReturn as ret"
+    class="banner"
+    [class.banner--ok]="ret.status === 'successful'"
+    role="status"
+  >
+    <div>
+      <strong>Hosted checkout returned: {{ ret.status }}</strong>
+      <p>
+        tx_ref <code>{{ ret.txRef }}</code>
+        <ng-container *ngIf="ret.transactionId">
+          · transaction_id <code>{{ ret.transactionId }}</code>
+        </ng-container>
+      </p>
+      <p class="muted">These values come from the URL. Verify the transaction on your server before giving value.</p>
+    </div>
+    <button type="button" class="icon-button" (click)="dismissReturn()" aria-label="Dismiss">✕</button>
+  </section>
+
+  <section class="cards">
+    <article class="card">
+      <div class="card__head">
+        <span class="eyebrow">flwInlineCheckout</span>
+        <h2>Inline checkout</h2>
+        <p class="muted">Opens the Flutterwave modal on your page. Results come back through outputs.</p>
+      </div>
+
+      <dl class="summary">
+        <div><dt>Item</dt><dd>{{ paymentData.customizations?.description }}</dd></div>
+        <div><dt>Methods</dt><dd>{{ paymentData.payment_options }}</dd></div>
+        <div class="summary__total">
+          <dt>Total</dt>
+          <dd>{{ paymentData.amount | currency: paymentData.currency : 'symbol-narrow' }}</dd>
+        </div>
+      </dl>
+
+      <pre class="code"><code>{{ inlineSnippet }}</code></pre>
+
+      <button
+        type="button"
+        class="pay"
+        [flwInlineCheckout]="paymentData"
+        [flwCloseOnCallback]="true"
+        (flwCallback)="makePaymentCallback($event)"
+        (flwClose)="cancelledPayment($event)"
+      >
+        Pay {{ paymentData.amount | currency: paymentData.currency : 'symbol-narrow' }}
+      </button>
+    </article>
+
+    <article class="card">
+      <div class="card__head">
+        <span class="eyebrow">flwHtmlCheckout</span>
+        <h2>Hosted checkout</h2>
+        <p class="muted">Posts a form to Flutterwave's payment page, then redirects back here.</p>
+      </div>
+
+      <dl class="summary">
+        <div><dt>Customer</dt><dd>{{ htmlCheckoutData.customer.email }}</dd></div>
+        <div><dt>Returns to</dt><dd class="truncate">{{ htmlCheckoutData.redirect_url }}</dd></div>
+        <div class="summary__total">
+          <dt>Total</dt>
+          <dd>{{ htmlCheckoutData.amount | currency: htmlCheckoutData.currency : 'symbol-narrow' }}</dd>
+        </div>
+      </dl>
+
+      <pre class="code"><code>{{ htmlSnippet }}</code></pre>
+
+      <form [flwHtmlCheckout]="htmlCheckoutData">
+        <button type="submit" class="pay">
+          Pay {{ htmlCheckoutData.amount | currency: htmlCheckoutData.currency : 'symbol-narrow' }}
+        </button>
+      </form>
+    </article>
+  </section>
+
+  <section class="card log">
+    <div class="log__head">
+      <div>
+        <h2>Events</h2>
+        <p class="muted">What <code>flwCallback</code> and <code>flwClose</code> emit.</p>
+      </div>
+      <button *ngIf="events.length" type="button" class="ghost" (click)="clearEvents()">Clear</button>
+    </div>
+
+    <p *ngIf="!events.length" class="empty">No events yet. Try the inline checkout above.</p>
+
+    <ol class="events">
+      <li *ngFor="let e of events" class="event" [class.event--close]="e.kind === 'close'">
+        <div class="event__meta">
+          <span class="tag">{{ e.kind === 'callback' ? 'flwCallback' : 'flwClose' }}</span>
+          <strong>{{ e.title }}</strong>
+          <time>{{ e.time | date: 'HH:mm:ss' }}</time>
+        </div>
+        <pre class="code code--small"><code>{{ e.detail }}</code></pre>
+      </li>
+    </ol>
+  </section>
+
+  <footer class="foot muted">
+    Uses your Flutterwave <strong>public test key</strong>. No real money moves.
+    Always verify payments on your server with your secret key.
+  </footer>
+</main>

@@ -4,6 +4,40 @@
   "newProjectRoot": "projects",
   "projects": {
     "ng-flutterwave": {
+      "projectType": "library",
+      "root": "projects/ng-flutterwave",
+      "sourceRoot": "projects/ng-flutterwave/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/ng-flutterwave/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ng-flutterwave/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/ng-flutterwave/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
+            "tsConfig": "projects/ng-flutterwave/tsconfig.spec.json",
+            "karmaConfig": "karma.conf.js"
+          }
+        }
+      }
+    },
+    "demo": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +47,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/ng-flutterwave",
+            "outputPath": "dist/demo",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -37,8 +71,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "6kb",
+                  "maximumError": "8kb"
                 }
               ],
               "fileReplacements": [
@@ -55,7 +89,13 @@
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": true
+              "namedChunks": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.local.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -64,10 +104,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "ng-flutterwave:build:production"
+              "browserTarget": "demo:build:production"
             },
             "development": {
-              "browserTarget": "ng-flutterwave:build:development"
+              "browserTarget": "demo:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -75,7 +115,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ng-flutterwave:build"
+            "browserTarget": "demo:build"
           }
         },
         "test": {

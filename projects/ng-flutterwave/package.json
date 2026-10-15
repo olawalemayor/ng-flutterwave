@@ -1,0 +1,37 @@
+{
+  "name": "ng-flutterwave",
+  "version": "1.0.0",
+  "description": "An Angular library for making payments with Flutterwave Inline (Angular 16+)",
+  "author": {
+    "name": "Olawale Mayor",
+    "email": "olawalemayor90@gmail.com",
+    "url": "https://olawalemayor.netlify.app"
+  },
+  "homepage": "https://github.com/olawalemayor/ng-flutterwave",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olawalemayor/ng-flutterwave.git"
+  },
+  "bugs": {
+    "url": "https://github.com/olawalemayor/ng-flutterwave/issues"
+  },
+  "keywords": [
+    "fintech",
+    "flutterwave",
+    "angular",
+    "payment",
+    "pay",
+    "shop",
+    "africa",
+    "nigeria",
+    "gateway"
+  ],
+  "peerDependencies": {
+    "@angular/common": ">=16.0.0 <20.0.0",
+    "@angular/core": ">=16.0.0 <20.0.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}

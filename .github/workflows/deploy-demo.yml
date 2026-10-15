@@ -1,0 +1,70 @@
+name: Test and deploy demo
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - run: npm ci
+
+      - name: Test library
+        run: npx ng test ng-flutterwave --watch=false --browsers=ChromeHeadless
+
+      - name: Build library
+        run: npm run build
+
+      - name: Add Flutterwave public key
+        if: github.ref == 'refs/heads/master'
+        env:
+          FLUTTERWAVE_PUBLIC_KEY: ${{ secrets.FLUTTERWAVE_PUBLIC_KEY }}
+        run: |
+          if [ -z "$FLUTTERWAVE_PUBLIC_KEY" ]; then
+            echo "::error::Add the FLUTTERWAVE_PUBLIC_KEY repository secret"
+            exit 1
+          fi
+          case "$FLUTTERWAVE_PUBLIC_KEY" in
+            FLWPUBK*) ;;
+            *) echo "::error::FLUTTERWAVE_PUBLIC_KEY must be a public key (FLWPUBK...), never a secret key"; exit 1 ;;
+          esac
+          sed -i "s|__FLUTTERWAVE_PUBLIC_KEY__|$FLUTTERWAVE_PUBLIC_KEY|" src/environments/environment.prod.ts
+
+      - name: Build demo
+        run: npx ng build demo --base-href "/${{ github.event.repository.name }}/"
+
+      - uses: actions/upload-pages-artifact@v3
+        if: github.ref == 'refs/heads/master'
+        with:
+          path: dist/demo
+
+  deploy:
+    if: github.ref == 'refs/heads/master'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
